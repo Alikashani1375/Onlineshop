@@ -14,12 +14,13 @@ type newUser = {
 
 export default function Home() {
   const [user, setUser] = useState<newUser>({
-    username: "",
-    password: "",
+    username: "admin",
+    password: "admin",
     email: "",
     id: "",
   });
   const [email, setEmail] = useState<string>("");
+  const [waiting, setWating] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [logged, setLogged] = useState<boolean>(false);
 
@@ -55,6 +56,7 @@ export default function Home() {
   };
 
   const handleLogin = async (username: string, password: string) => {
+    setWating(true);
     try {
       const response = await fetch(
         `/api/users?username=${username}&password=${password}`
@@ -66,6 +68,7 @@ export default function Home() {
         localStorage.setItem("password", password);
         setLogged(true);
         setError("");
+        setWating(false);
       } else {
         resetUserState();
       }
@@ -92,6 +95,7 @@ export default function Home() {
       ) : (
         <div className="w-full">
           <Login
+            waiting={waiting}
             user={user}
             setUser={setUser}
             handleRegister={handleRegister}
