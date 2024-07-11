@@ -12,7 +12,7 @@ const connect = async()=>{
         console.log('conneting')
     }
     try{
-        mongoose.connect(MONGODB_URI!,{
+       await mongoose.connect(MONGODB_URI!,{
             dbName:'onlineshop-fullstack',
             bufferCommands:false
         })

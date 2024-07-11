@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -9,18 +9,23 @@ type newUser = {
   username: string;
   password: string;
   email: string;
-  id:string
+  id: string;
 };
 
 export default function Home() {
-  const [user, setUser] = useState<newUser>({ username: '', password: '', email: '' ,id:''});
-  const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [user, setUser] = useState<newUser>({
+    username: "",
+    password: "",
+    email: "",
+    id: "",
+  });
+  const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [logged, setLogged] = useState<boolean>(false);
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedPassword = localStorage.getItem('password');
+    const storedUsername = localStorage.getItem("username");
+    const storedPassword = localStorage.getItem("password");
     if (storedUsername && storedPassword) {
       handleLogin(storedUsername, storedPassword);
     }
@@ -28,54 +33,51 @@ export default function Home() {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       const newUser = await response.json();
       setLogged(true);
       setUser(newUser);
-      localStorage.setItem('username', user.username);
-      localStorage.setItem('password', user.password);
-      alert('User created');
+      localStorage.setItem("username", user.username);
+      localStorage.setItem("password", user.password);
+      alert("User created");
     } catch (error) {
       setLogged(false);
-      console.error('Error:', error);
-      setError('Failed to register user');
+      console.error("Error:", error);
+      setError("Failed to register user");
     }
   };
 
   const handleLogin = async (username: string, password: string) => {
-    
-  
-      try {
-        const response = await fetch(`/api/users?username=${username}&password=${password}`);
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-          localStorage.setItem('username', username);
-          localStorage.setItem('password', password);
-          setLogged(true);
-          setError('');
-        } else {
-          resetUserState();
-          setError('Cannot connect to database');
-        }
-      } catch (err) {
+    try {
+      const response = await fetch(
+        `/api/users?username=${username}&password=${password}`
+      );
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+        setLogged(true);
+        setError("");
+      } else {
         resetUserState();
-        setError('Username or password is wrong');
-        console.log(err);
       }
-    
-   
+    } catch (err) {
+      resetUserState();
+      setError("Username or password is wrong");
+      console.log(err);
+    }
   };
 
   const resetUserState = () => {
-    setUser({ username: '', password: '', email: '',id:'' });
+    setUser({ username: "", password: "", email: "", id: "" });
     setLogged(false);
   };
 
@@ -83,8 +85,8 @@ export default function Home() {
     <div className="w-full">
       {logged ? (
         <div>
-          <Navbar logged={logged}  setLogged={setLogged} user={user} />
-          <Products user={user}/>
+          <Navbar logged={logged} setLogged={setLogged} user={user} />
+          <Products user={user} />
           <Footer />
         </div>
       ) : (

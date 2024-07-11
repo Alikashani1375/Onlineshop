@@ -21,12 +21,12 @@ export const GET = async(request:Request)=>{
 
         const user= await User.findOne({username:username,password:password})
         if(!user){
-            return new NextResponse('phone not found or does not belong the user',{status:404})
+            return new NextResponse('user not found',{status:404})
         }
         return new NextResponse(JSON.stringify(user),{status:200});
 
     }catch(err){
-        return new NextResponse(JSON.stringify({message:"err on deleting"}),{status:400})
+        return new NextResponse(JSON.stringify({message:`${err}`}),{status:400})
 
     }
 }
